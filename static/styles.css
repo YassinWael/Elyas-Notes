@@ -1,0 +1,155 @@
+:root {
+    --primary-color: rgb(117, 79, 3);
+    --border-radius:25px;
+    --test-border: 2px solid red;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default padding */
+ul[class],
+ol[class] {
+  padding: 0;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  padding: 10px;
+  border: 2px solid red;
+  position: relative;
+}
+
+/* Remove list styles on ul, ol elements with a class attribute */
+ul[class],
+ol[class] {
+  list-style: none;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Natural flow and rhythm in articles by default */
+article > * + * {
+  margin-top: 1em;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+
+
+
+
+
+nav {
+    /* border: 2px solid blue; */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 6vw;
+}
+.name {
+    justify-self: flex-start;
+
+}
+.nav-list {
+    display: flex;
+    gap: 2vw;
+    font-size: 24px;
+    align-items: flex-end;
+
+}
+
+
+.active {
+    color: var(--primary-color);
+    border-bottom: 3px solid var(--primary-color);
+}
+
+.join-button {
+    font-weight: 100;
+    min-height: 40px;
+    width: 130px;
+    margin-left:auto;
+    margin-right: 5px;
+    max-width: 18%;
+    color: white;
+    font-size: 24px;
+    background-color: var(--primary-color);
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.join-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 6px 5px rgba(45, 44, 44, 0.634);
+}

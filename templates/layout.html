@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>Elyas's Notes</title>
+</head>
+
+<nav>
+    <h1 class="name">Elyas's Notes</h1>
+    <ul class="nav-list">
+        <li><a href="#" class="nav-link active">Home</a></li>
+        <li><a href="#" class="nav-link">Math</a></li>
+        <li><a href="#" class="nav-link">Chemistry</a></li>
+        <li><a href="#" class="nav-link">Biology</a></li>
+        <li><a href="#" class="nav-link">Physics</a></li>
+    </ul>
+    <a href="#" class="join-button">Join Now</a>
+</nav>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+
+<footer>
+    
+</footer>
+
+
+
+
+<script>
+    document.querySelectorAll(".nav-link").forEach(link => {
+        link.addEventListener("click", function(e) {
+            document.querySelectorAll(".nav-link").forEach(link => {
+                link.classList.remove("active")
+            })
+            link.classList.add("active")
+        })
+    })
+</script>
+</html>
