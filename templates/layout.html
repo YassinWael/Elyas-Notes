@@ -3,29 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/notes.ico">
     <link rel="stylesheet" href="/static/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <title>Elyas's Notes</title>
 </head>
 
-<nav>
-    <h1 class="name">Elyas's Notes</h1>
-    <ul class="nav-list">
-        <li><a href="#" class="nav-link active">Home</a></li>
-        <li><a href="#" class="nav-link">Math</a></li>
-        <li><a href="#" class="nav-link">Chemistry</a></li>
-        <li><a href="#" class="nav-link">Biology</a></li>
-        <li><a href="#" class="nav-link">Physics</a></li>
-    </ul>
-    <a href="#" class="join-button">Join Now</a>
-</nav>
+
 <body>
+    <nav>
+        <h1 class="name">Elyas's Notes</h1>
+        <ul class="nav-list">
+            <li><a href="#" class="nav-link active">Home</a></li>
+            <li><a href="#" class="nav-link">Math</a></li>
+            <li><a href="#" class="nav-link">Chemistry</a></li>
+            <li><a href="#" class="nav-link">Biology</a></li>
+            <li><a href="#" class="nav-link">Physics</a></li>
+        </ul>
+        <a href="/sign-up" class="join-button">Join Now</a>
+    </nav>
+
     {% block content %}
+    
     {% endblock %}
+
+
+    <footer>
+        <div id="call-to-action">
+            <h2 style="text-align: center; color:white; font-size: var(--font-size)">Join us</h1>
+            <a href="#" class="join-button">Sign Up</a>
+        </div>
+        <h1 class="name" id="footer-name">Elyas's Notes</h1>
+        <hr style="width: 80%;margin-top:auto; margin-bottom:min(10%,30px);">
+        <p id="copyright">Elyas Company Limited (LMFAOOO) 2024©</p>
+    </footer>
 </body>
 
-<footer>
-    
-</footer>
+
+
+
 
 
 
