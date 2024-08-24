@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<section id="sign-up">
+    <p id="sign-up-heading" class="name">
+    
+        <span style="font-size: min(calc(var(--font-size) + 3vh),75px);">Welcome,</span> <br>
+        Create an account
+    </p>
+    <form action="" method="POST" id="sign-up-form">
+
+
+        <div class="form-group">
+            <label  class="form-label">Name</label>
+            <input class="form-input" required name="username" max="10" type="input" placeholder="Enter name"> 
+        </div>
+
+
+
+        <div class="form-group" style="position: relative;">
+            <label for="form-email" class="form-label" >Email</label>
+            <input class="form-input" required name="email" id="form-email" type="email" placeholder="Enter email"> 
+        </div>
+
+        <div class="form-group">
+            <label for="form-password" class="form-label" >Password</label>
+            <input class="form-input" required name="password" id="form-email" type="password" placeholder="Enter password"> 
+        </div>
+        
+        <button href="#" class="join-button form-submit" type="submit" style="margin: 0; border:0;">Sign Up</button>
+    
+        <p class="form-text">Already have an account? <span id="login"><a href="/login">Login</a></span></p>
+    </form>
+</section>
+
+
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var footer = document.getElementById("footer");
+        footer.style.display = "none"
+    });
+    function checkForOverflow() {
+        const elements = document.querySelectorAll('*');
+        const viewportWidth = document.documentElement.clientWidth;
+        const viewportHeight = document.documentElement.clientHeight;
+    
+        elements.forEach(element => {
+            const boundingRect = element.getBoundingClientRect();
+    
+            // Check if the element overflows the viewport width or height
+            if (boundingRect.width > viewportWidth || boundingRect.height > viewportHeight || 
+                boundingRect.left < 0 || boundingRect.right > viewportWidth || 
+                boundingRect.top < 0 || boundingRect.bottom > viewportHeight) {
+    
+                console.log('Overflowing Element:', element);
+                console.log('Bounding Rect:', boundingRect);
+            }
+        });
+    }
+    
+    // Run the function to find and log overflowing elements
+    document.addEventListener("DOMContentLoaded",checkForOverflow())
+    
+</script>
+
+{% endblock %}

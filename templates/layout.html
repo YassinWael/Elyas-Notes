@@ -14,7 +14,9 @@
 
 <body>
     <nav>
-        <h1 class="name">Elyas's Notes</h1>
+      
+            <a class="name" href="/home">Elyas's Notes</a>
+      
         <ul class="nav-list">
             <li><a href="#" class="nav-link active">Home</a></li>
             <li><a href="#" class="nav-link">Math</a></li>
@@ -24,16 +26,26 @@
         </ul>
         <a href="/sign-up" class="join-button">Join Now</a>
     </nav>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+                {% for message in messages %}
+                    <p id="flashed-message" class="message {{ message[0] }}">{{ message[1] }} 
+                    <button class="message {{ message[0] }}" style="border: none; position:absolute; top:0; right:5vw; padding:0; font-size:calc(var(--font-size) - 4px);" onclick="this.parentElement.style.display='none'">&times;</button>
 
+                    </p> 
+                    
+                {% endfor %}
+            {% endif %}
+    {% endwith %}
     {% block content %}
     
     {% endblock %}
 
 
-    <footer>
+    <footer id="footer">
         <div id="call-to-action">
             <h2 style="text-align: center; color:white; font-size: var(--font-size)">Join us</h1>
-            <a href="#" class="join-button">Sign Up</a>
+            <a href="/sign-up" class="join-button">Sign Up</a>
         </div>
         <h1 class="name" id="footer-name">Elyas's Notes</h1>
         <hr style="width: 80%;margin-top:auto; margin-bottom:min(10%,30px);">

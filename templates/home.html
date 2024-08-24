@@ -1,12 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
+    {{ user_id }}
     <section id="hero">
         <div class="background">
             <img src="/static/book.png" alt="" id="hero-img">
         </div>
         <div class="hero-container">
             <h1 class="name" id="sharing-notes">Sharing Notes</h1>
-            <a href="#" class="join-button" style="margin: 0;">Sign Up</a>
+            <a href="/sign-up" class="join-button" style="margin: 0;">Sign Up</a>
         </div>
         
     </section>

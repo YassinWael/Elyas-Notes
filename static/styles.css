@@ -61,7 +61,6 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
-  position: relative;
 }
 
 /* Remove list styles on ul, ol elements with a class attribute */
@@ -104,8 +103,31 @@ select {
   }
 }
 
+.message {
+    font-size: calc(var(--font-size) - 4px);
+    color: black;
+    text-align: center;
+    position: relative;
+}
 
+.success {
+    background-color: rgba(6, 163, 6, 0.818);
+}
 
+.error {
+    background-color: rgb(255, 0, 0);
+}
+
+.warning {
+    background-color: rgb(231, 231, 18);
+}
+
+a[class="name"] {
+    font-weight: bold;
+    margin-left: 5px;
+    font-size: min(28px,calc(var(--font-size) + 1.5vh)) !important;
+           
+}
 
 
 
@@ -335,6 +357,107 @@ section {
 }
 
 
+/* ------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------- */
+/* --------------------------------sign-up.html-------------------------------------- */
+
+#sign-up {
+    min-height: 100%;
+    height: 100vh;
+    background: linear-gradient(var(--neutral-800),rgba(46, 51, 56, 0.95));
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+    flex-direction: column;
+}
+
+#sign-up-heading {
+    margin-right: auto;
+    margin-left: 30%;
+    color: rgb(168, 173, 183);
+    font-size: min(calc(var(--font-size) + 2vh),50px);
+}
+
+#sign-up-form {
+    min-width: 460px;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: min(3vh,26px);
+    overflow-x: hidden;
+
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.form-input {
+    background-color: rgb(86, 93, 109);
+    border: none;
+    border-radius: 5px;
+    padding: 4px;
+    color: white;
+}
+
+.form-label {
+    color: rgb(168, 173, 183);
+    display: block;
+  
+    
+}
+
+.form-submit {
+    width: 100%;
+    font-size: calc(var(--font-size) -0.6vh);
+}
+
+
+.form-text {
+    align-self: center;
+    color: rgba(103, 74, 16, 0.9);
+    font-size: var(--font-size);
+}
+
+
+
+#login {
+    color:rgb(145, 100, 11);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -355,6 +478,14 @@ section {
 
 
 @media screen and (max-width:600px) {
+    *:not(:has(li)) {
+        max-width: 100%;
+        overflow-x: hidden !important;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
 
     ul li:last-child{
         display: none;
@@ -384,5 +515,26 @@ section {
     .subject-card {
         width: 100%;
         height: 30%;
+    }
+   
+
+    #sign-up {
+        min-width: 100%;
+    }
+
+    #sign-up-heading {
+        margin-left: 30px;
+    }
+
+    .form-group {
+        min-width: 80vw;
+        margin-right: auto;
+        margin-left: 55px;
+    }
+    .form-group:first-child {
+        min-width: 80vw;
+        margin-right: auto;
+        margin-left: 55px;
+        margin-top: 2vh;
     }
 }
