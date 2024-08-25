@@ -68,10 +68,10 @@ def signup():
         username = request.form.get("username")
         email = request.form.get("email")
         password = request.form.get("password")
-        ic(request.user_agent)
-        ic(request.remote_addr)
+
         if verify(username,email):
-            ic("here")
+        
+
             users_collection.insert_one({
                 "username":username,
                 "email":email,
@@ -97,41 +97,64 @@ def signup():
 
 @app.route("/login",methods = ['GET','POST'])
 def login():
-    flash("You can only login on the device you registered on.", "warning")
+   
     user = find_by_id(session.get('user_id'))
     ic(user)
-    # TODO: use the same try-value error thing used in sign-up to fix this so that it queries the database directly.
-    if user:
-        if request.method == "POST":
-            email = request.form.get("email")
-            password = request.form.get("password")
-            if email == user['email'] and password == user['password']:
-                if user['activated'] == 'yes':
-                    flash("Logged in Successfully","success")
+  
+ 
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        user_ip = request.remote_addr
+
+        try:
+            user = users_collection.find_one({"email":email})
+            if user:
+                if password == user["password"]:
+                    if user['activated'] == 'yes':
+                        flash("Logged in successfully :) ","success")
+                        session['user_id'] = str(user['_id'])
+                        user_logged_in_devices = user['devices']
+                        user_logged_in_devices.append(request.remote_addr)
+                        ic(user_logged_in_devices)
+                        ic(type(user_logged_in_devices))
+                        ic(user)
+                        updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
+                        ic(updated)
+
+                        return redirect("/")
+                    else:
+                        raise ValueError("Correct credintials, but account has not been approved yet, try again later or contact Yassin")
+
                 else:
-                    flash("Correct Credintials, but please contact Yassin to activate your account.","error")
-                    
+                    raise ValueError("Wrong email or password. Please try again or contact Yassin to reset.")
                 
-                return redirect("/")
             else:
-                flash("Wrong email or password. Please try again or contact Yassin to reset.", "error")
-                ic(email,user['email'])
-                ic(password,user['password'])
-                return render_template('login.html',username=user['username'])
-
-            
-    else:
-        flash("Please register before attempting to login","error")
-        return redirect("/sign-up")
+                raise ValueError(f"User with email {email} was not found in the database.")
 
 
 
+        except ValueError as ve:
+            ic(ve)
+            ve = str(ve)
+            ic(ve)
+            flash(ve,"error")
+            ic(ve)
+            return redirect(request.referrer)
+    return render_template('login.html',username=user['username'] if user else "")
+        
+@app.route("/logout/<user_id>",methods = ["POST","GET"])     
+def logout(user_id):
+    session['user_id'] = None
+    user = find_by_id(user_id)
+    user_logged_in_devices = user['devices']
+    user_logged_in_devices.remove(request.remote_addr)
+    updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
+    ic(updated)
 
 
 
-
-
-    return render_template('login.html',username=user['username'])
+    return render_template('login.html',username=user['username'] if user else "")
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host='0.0.0.0')
 
