@@ -363,19 +363,47 @@ section {
 /* --------------------------------sign-up.html-------------------------------------- */
 
 #sign-up {
+    position: relative;
     min-height: 100%;
     height: 100vh;
-    background: linear-gradient(var(--neutral-800),rgba(46, 51, 56, 0.95));
+    background: var(--neutral-800);
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center ;
     flex-direction: column;
+    overflow: hidden;
 }
 
+
+#sign-up::before,
+#sign-up::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 25%, transparent 75%);
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    overflow: hidden;
+}
+
+#sign-up::before {
+    bottom: -100px;
+    left: -100px;
+}
+
+#sign-up::after {
+    top: -100px;
+    right: -100px;
+}
+
+
 #sign-up-heading {
-    margin-right: auto;
-    margin-left: 30%;
+    min-width: 460px;
+    width: 40%;
+    margin-bottom: 5px;
     color: rgb(168, 173, 183);
     font-size: min(calc(var(--font-size) + 2vh),50px);
 }

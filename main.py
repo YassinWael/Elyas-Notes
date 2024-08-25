@@ -106,23 +106,27 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
         user_ip = request.remote_addr
-
+        
         try:
             user = users_collection.find_one({"email":email})
             if user:
+                user_logged_in_devices = user['devices']
                 if password == user["password"]:
                     if user['activated'] == 'yes':
-                        flash("Logged in successfully :) ","success")
-                        session['user_id'] = str(user['_id'])
-                        user_logged_in_devices = user['devices']
-                        user_logged_in_devices.append(request.remote_addr)
-                        ic(user_logged_in_devices)
-                        ic(type(user_logged_in_devices))
-                        ic(user)
-                        updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
-                        ic(updated)
-
-                        return redirect("/")
+                        if user_ip not in user_logged_in_devices:
+                            if len(user_logged_in_devices)<2:
+                                flash("Logged in successfully :) ","success")
+                                session['user_id'] = str(user['_id'])
+                                
+                                user_logged_in_devices.append(request.remote_addr)
+                                ic(user_logged_in_devices)
+                                ic(user)
+                                updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
+                                ic(updated)
+                                return redirect("/")
+                            else:
+                                raise ValueError("You are already logged in from two other devices, which is the max limit.")
+                            
                     else:
                         raise ValueError("Correct credintials, but account has not been approved yet, try again later or contact Yassin")
 
