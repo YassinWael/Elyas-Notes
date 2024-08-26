@@ -58,9 +58,12 @@ def verify(username,email):
 @app.route("/home")
 def home():
     
-
+    flash("testing flashed messages for relative font sizing","success")
     return render_template("home.html",user_id=session.get('user_id'))
 
+@app.route("/viewall")
+def view_all():
+    return render_template("view_all.html")
 
 @app.route("/sign-up",methods=["POST","GET"])
 def signup():
@@ -82,8 +85,7 @@ def signup():
             })  
 
             user_id = users_collection.find_one({"email":email})
-            ic(str(user_id['_id']))
-            session['user_id'] = str(user_id['_id'])
+            
             flash("Successfully registered, Proceed to log-in below.","success")
 
             return redirect("/login")
@@ -147,15 +149,19 @@ def login():
             return redirect(request.referrer)
     return render_template('login.html',username=user['username'] if user else "")
         
-@app.route("/logout/<user_id>",methods = ["POST","GET"])     
-def logout(user_id):
-    session['user_id'] = None
-    user = find_by_id(user_id)
-    user_logged_in_devices = user['devices']
-    user_logged_in_devices.remove(request.remote_addr)
-    updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
-    ic(updated)
+@app.route("/logout",methods = ["POST","GET"])     
+def logout():
+    if session['user_id']:
+        user_id = session['user_id']
+        session['user_id'] = None
+        user = find_by_id(user_id)
+        user_logged_in_devices = user['devices']
+        user_logged_in_devices.remove(request.remote_addr)
+        updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
+        ic(updated)
 
+    else:
+        return redirect(request.referrer)
 
 
     return render_template('login.html',username=user['username'] if user else "")
