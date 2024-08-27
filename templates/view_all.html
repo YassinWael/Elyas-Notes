@@ -4,6 +4,36 @@
 
 {% block content %}
 
-<h1 class="name"> All Subjects</h1>
+<section id="view-all">
+    <h1 class="name" id="sharing-notes" style="align-self: flex-start;">All Subjects</h1>
+    <section id="subjects">
+        <!-- TODO: #2 Learn Grid to be able to do 2-2-1 tehcnuiqe -->
+        <div id="subjects-container">
+            <div class="subject-card" style="animation-timeline: scroll();">
+                <img src="/static/math.jpg" id="subject-img" alt="math">
+                <p class="subject-text">Math</p>
+                <p class="subject-text notes-count">8 Notes</p>
+            </div>
+            <div class="subject-card" style="animation-timeline: scroll();">
+                <img id="subject-img" src="/static/physics.jpg">
+                <p class="subject-text">Physics</p>
+                <p  class="subject-text notes-count">10 Notes</p>
+            </div>
+            <div class="subject-card" style="animation-timeline: scroll();"> 
+                <img src="/static/biology.jpg" id="subject-img">
+                <p class="subject-text">Biology</p>
+                <p class="subject-text notes-count"> 5 Notes</p>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <hr style="width: 80%; position:absolute; bottom:2vh; left:10%; opacity: 0.6;">
+
+
+</section>
+
 
 {% endblock %}

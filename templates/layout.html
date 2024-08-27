@@ -8,6 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
     <title>Elyas's Notes</title>
 </head>
 
@@ -30,7 +34,7 @@
         {% if messages %}
                 {% for message in messages %}
                     <p id="flashed-message" class="message {{ message[0] }}">{{ message[1] }} 
-                    <button class="message {{ message[0] }}" style="border: none; background:transparent; position:absolute; top:0; right:5vw; padding:0; font-size:calc(var(--font-size) + .2vh);" onclick="this.parentElement.style.display='none'">&times;</button>
+                    <button class="message {{ message[0] }}" style="border: none; background:transparent; color:white; position:absolute; top:0; right:5vw; padding:0; font-size:calc(var(--font-size) + .2vw);" onclick="this.parentElement.style.display='none'">&times;</button>
 
                     </p> 
                     

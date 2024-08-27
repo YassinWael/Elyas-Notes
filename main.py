@@ -80,7 +80,7 @@ def signup():
                 "email":email,
                 "password":password,
                 "activated":"no",
-                "devices":[request.remote_addr]
+                "devices":[]
 
             })  
 
@@ -113,10 +113,11 @@ def login():
             user = users_collection.find_one({"email":email})
             if user:
                 user_logged_in_devices = user['devices']
+                user_devices_limit = user['devices_limit']
                 if password == user["password"]:
                     if user['activated'] == 'yes':
                         if user_ip not in user_logged_in_devices:
-                            if len(user_logged_in_devices)<2:
+                            if len(user_logged_in_devices) < int(user_devices_limit):
                                 flash("Logged in successfully :) ","success")
                                 session['user_id'] = str(user['_id'])
                                 
@@ -127,12 +128,14 @@ def login():
                                 ic(updated)
                                 return redirect("/")
                             else:
-                                raise ValueError("You are already logged in from two other devices, which is the max limit.")
+                                e = f"You are already logged in from {user_devices_limit} other devices, which is the max limit."
+                                raise ValueError(e)
                             
                     else:
                         raise ValueError("Correct credintials, but account has not been approved yet, try again later or contact Yassin")
 
                 else:
+                    ic(f"{email}:{password}, {user['email']}: {user['password']}")
                     raise ValueError("Wrong email or password. Please try again or contact Yassin to reset.")
                 
             else:
