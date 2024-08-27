@@ -19,7 +19,6 @@
 
 
 
-
 /* Box sizing rules */
 *,
 *::before,
@@ -223,13 +222,35 @@ footer {
 @keyframes come-alive {
     from {
         opacity: 0;
-        scale:.1;
+       
     }
     to {
         opacity: 1;
-        scale: 1;
+     
     }
 }
+
+.subject-card.animate__animated:first-child {
+    animation-timeline: scroll();
+    animation-name: slideInLeft,come-alive;
+    animation-duration: 3s;
+
+}
+
+.subject-card.animate__animated:nth-child(2) {
+    animation-timeline: scroll();
+    animation-name: slideInUp,come-alive;
+    animation-duration: 3s;
+
+}
+
+.subject-card.animate__animated:last-child {
+    animation-timeline: scroll();
+    animation-name: slideInRight,come-alive;
+    
+
+}
+
 
 section {
     position: relative;
@@ -347,7 +368,7 @@ section {
    
 }
 #subject-img {
-    width: 95%;
+    width: 100%;
     border-radius: 8px;
     height: 65%;
     margin-bottom: 3%;
@@ -479,7 +500,7 @@ section {
 /* --------------------------------view-all.html-------------------------------------- */
 
 #view-all {
-    height: 80vh;
+    height: 120vh;
     min-width: 100%;
     background: var(--neutral-800);
     position: relative;
@@ -491,15 +512,21 @@ section {
 
 
 
+#all-subjects-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    
+    height: 100%;
 
+}
 
-
-
-
-
-
-
-
+.grid-subject-card {
+    max-height: 350px;
+    border-radius: 5px;
+    box-shadow: 0 0 8px 8px rgba(0,0,0,0.75);
+}
 
 
 
@@ -537,9 +564,18 @@ section {
 @media screen and (max-width:600px) {
     *:not(:has(li)) {
         max-width: 100%;
+        
+    }
+    section {
         overflow-x: hidden !important;
     }
+    #view-all {
+        min-height: 200vh;
+    }
 
+    #all-subjects-container {
+        height: 90%;
+    }
     body {
         overflow-x: hidden;
     }

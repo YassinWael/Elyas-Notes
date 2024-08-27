@@ -7,7 +7,12 @@
         </div>
         <div class="hero-container">
             <h1 class="name" id="sharing-notes">Sharing Notes</h1>
+            
+            {% if session['user_id'] %}
+
+            {% else %}
             <a href="/sign-up" class="join-button" style="margin: 0;">Sign Up</a>
+            {% endif %}
         </div>
         
     </section>
@@ -19,18 +24,18 @@
             <a href="/viewall" class="join-button" id="all-subjects" >View All</a>
         </p>
         <div id="subjects-container">
-            <div class="subject-card animate__animated animate__slideInLeft" style="animation-timeline: scroll();">
-                <img src="/static/math.jpg" id="subject-img" alt="math">
+            <div class="subject-card animate__animated">
+                <img src="/static/math.webp" id="subject-img" alt="math">
                 <p class="subject-text">Math</p>
                 <p class="subject-text notes-count">8 Notes</p>
             </div>
-            <div class="subject-card animate__animated animate__slideInLeft" style="animation-timeline: scroll();">
-                <img id="subject-img" src="/static/physics.jpg">
+            <div class="subject-card animate__animated">
+                <img id="subject-img" src="/static/physics.webp">
                 <p class="subject-text">Physics</p>
                 <p  class="subject-text notes-count">10 Notes</p>
             </div>
-            <div class="subject-card animate__animated animate__slideInLeft" style="animation-timeline: scroll();"> 
-                <img src="/static/biology.jpg" id="subject-img">
+            <div class="subject-card animate__animated"> 
+                <img src="/static/biology.webp" id="subject-img">
                 <p class="subject-text">Biology</p>
                 <p class="subject-text notes-count"> 5 Notes</p>
             </div>

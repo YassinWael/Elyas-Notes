@@ -120,6 +120,7 @@ def login():
                             if len(user_logged_in_devices) < int(user_devices_limit):
                                 flash("Logged in successfully :) ","success")
                                 session['user_id'] = str(user['_id'])
+                                session['username'] = user['username']
                                 
                                 user_logged_in_devices.append(request.remote_addr)
                                 ic(user_logged_in_devices)
@@ -157,6 +158,7 @@ def logout():
     if session['user_id']:
         user_id = session['user_id']
         session['user_id'] = None
+        session['username'] = None
         user = find_by_id(user_id)
         user_logged_in_devices = user['devices']
         user_logged_in_devices.remove(request.remote_addr)

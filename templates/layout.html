@@ -8,10 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
+    <link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
     <title>Elyas's Notes</title>
 </head>
 
@@ -28,7 +28,11 @@
             <li><a href="#" class="nav-link">Biology</a></li>
             <li><a href="#" class="nav-link">Physics</a></li>
         </ul>
-        <a href="/sign-up" class="join-button">Join Now</a>
+        {% if session['user_id'] %}
+            <a href="/logout" class="join-button">Logout</a>
+            {% else %}
+            <a href="/sign-up" class="join-button">Join Now</a>
+            {% endif %}
     </nav>
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
@@ -48,8 +52,14 @@
 
     <footer id="footer">
         <div id="call-to-action">
+            
+            {% if session['user_id'] %}
+            <h2 style="text-align: center; color:white; font-size: calc(var(--font-size + 5px)); font-family: 'Bona Nova SC', serif;">{{ session['username'] }}</h1>
+            <a href="/logout" class="join-button">Logout</a>
+            {% else %}
             <h2 style="text-align: center; color:white; font-size: var(--font-size)">Join us</h1>
             <a href="/sign-up" class="join-button">Sign Up</a>
+            {% endif %}
         </div>
         <h1 class="name" id="footer-name">Elyas's Notes</h1>
         <hr style="width: 80%;margin-top:auto; margin-bottom:min(10%,30px);">
