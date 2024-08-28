@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 from os import environ
 from icecream import ic
+import functools
 load_dotenv()
 app = Flask(__name__)
 app.secret_key = environ.get("secret_key")
@@ -11,8 +12,18 @@ app.secret_key = environ.get("secret_key")
 client = MongoClient(environ.get("mongodb"))
 db = client["ElyasNotes"]
 users_collection = db.Users
+subjects_collection = db.Subjects
 
 
+def login_required(route):
+    @functools.wraps(route)
+    def protect(*args,**kwargs):
+        user_id = session.get('user_id')
+        if user_id:
+            return route(*args,**kwargs)
+        flash("Please Login first","warning")
+        return redirect("/login")
+    return protect
 
 
 
@@ -61,9 +72,8 @@ def home():
     flash("testing flashed messages for relative font sizing","success")
     return render_template("home.html",user_id=session.get('user_id'))
 
-@app.route("/viewall")
-def view_all():
-    return render_template("view_all.html")
+
+
 
 @app.route("/sign-up",methods=["POST","GET"])
 def signup():
@@ -105,18 +115,25 @@ def login():
   
  
     if request.method == "POST":
+        ic("Correct request")
         email = request.form.get("email")
         password = request.form.get("password")
         user_ip = request.remote_addr
+        ic(user_ip)
         
         try:
             user = users_collection.find_one({"email":email})
             if user:
+                ic("passed first IF check")
                 user_logged_in_devices = user['devices']
                 user_devices_limit = user['devices_limit']
                 if password == user["password"]:
+                    ic("passed second IF check")
                     if user['activated'] == 'yes':
+                        ic("passed third IF check")
                         if user_ip not in user_logged_in_devices:
+                            ic("passed user_ip check")
+
                             if len(user_logged_in_devices) < int(user_devices_limit):
                                 flash("Logged in successfully :) ","success")
                                 session['user_id'] = str(user['_id'])
@@ -131,6 +148,12 @@ def login():
                             else:
                                 e = f"You are already logged in from {user_devices_limit} other devices, which is the max limit."
                                 raise ValueError(e)
+                        else: # user is already logged in from this ip
+                            flash("Logged in successfully :) ","success")
+                            session['user_id'] = str(user['_id'])
+                            session['username'] = user['username']
+                            ic(user)
+                            return redirect("/")
                             
                     else:
                         raise ValueError("Correct credintials, but account has not been approved yet, try again later or contact Yassin")
@@ -150,6 +173,7 @@ def login():
             ic(ve)
             flash(ve,"error")
             ic(ve)
+            ic("error, unexpected")
             return redirect(request.referrer)
     return render_template('login.html',username=user['username'] if user else "")
         
@@ -170,6 +194,21 @@ def logout():
 
 
     return render_template('login.html',username=user['username'] if user else "")
+
+
+@app.route("/viewall")
+@login_required
+def view_all():
+    subjects = subjects_collection.find({})
+    
+    return render_template("view_all.html",subjects=list(subjects))
+
+
+@app.route("/subject/<subj>")
+def view_subject(subj):
+    subject = subjects_collection.find({"name":subj})
+    
+    return render_template("view_subject.html",subject=subj)
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host='0.0.0.0')
 
