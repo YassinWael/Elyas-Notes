@@ -534,9 +534,14 @@ section {
     flex-direction: column;
     justify-content: flex-end;
     box-shadow: 1px 8px 10px rgba(0, 0, 20, 0.756);
+    transition: all 0.3s ease;
     
 }   
-
+.vertical-subject-card:hover {
+    transform: scale(1.1);
+    box-shadow: 1px 12px 14px rgba(0, 0, 20, 0.756);
+    
+}
 
 .vertical-subject-card::after {
     content:"";
@@ -568,13 +573,41 @@ section {
 
 
 
+/* ------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------- */
+/* --------------------------------view-subject.html-------------------------------------- */
 
 
+#view-subject-hero {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    position:relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: brightness(90%);
+    z-index: -2;
+
+    
+}
 
 
-
-
-
+#view-subject-hero::after {
+    content:"";
+    width: 100%;
+    height: 65%;
+    position: absolute;
+    z-index: -1;
+    background: linear-gradient(to bottom, transparent,rgba(0, 0, 20, 0.92));
+    bottom: 0;
+    left: 0;
+    backdrop-filter:blur(.8);
+    backdrop-filter:opacity(.8);
+}
 
 
 

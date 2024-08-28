@@ -30,9 +30,9 @@ def login_required(route):
 
 def find_by_id(id):
     user_id = ObjectId(id)
-    user = users_collection.find({"_id":user_id})
+    user = users_collection.find_one({"_id":user_id})
     try:
-        return list(user)[0]
+        return user
     except Exception as e:
         return None
 
@@ -204,11 +204,14 @@ def view_all():
     return render_template("view_all.html",subjects=list(subjects))
 
 
-@app.route("/subject/<subj>")
-def view_subject(subj):
-    subject = subjects_collection.find({"name":subj})
-    
-    return render_template("view_subject.html",subject=subj)
+@app.route("/subject/<subject_name>")
+def view_subject(subject_name):
+    subject = subjects_collection.find_one({"name":subject_name})
+    ic(subject)
+    subjects_collection.update_one({"name":subject_name},{"$set":{"notes_count":(len(subject["notes"][0]["lessons"]) + len(subject["notes"][1]["lessons"]))}})
+
+
+    return render_template("view_subject.html",subject=subject)
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host='0.0.0.0')
 

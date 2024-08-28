@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 
 {% block content %}
-{{ subject }}
+{% set image_path = subject['image_2'] if subject['image_2'] else subject['image'] %}
+<section id="view-subject-hero" style="background-image: url('{{ image_path }}');">
+    
+    <h1 class="name" id="sharing-notes" style="margin:0;">{{ subject['name'] }}</h1>
+    <h2 style="color: rgba(255, 255, 255, 0.907);">{{ subject['notes_count' ]}} Notes</h2>
+</section>
 {% endblock %}
