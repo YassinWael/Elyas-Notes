@@ -228,7 +228,7 @@ def view_note(subject_name,chapter_name,lesson_name):
    
     found_lesson = [lesson for lesson in lessons if lesson["lesson_name"] == lesson_name][0]
     
-    
+    # TODO: Add image upload functionality
     
     
     

@@ -1,0 +1,63 @@
+{
+  "display_override": [
+    "window-controls-overlay"
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "mailto",
+      "url": "/newEmail?to=%s"
+    }
+  ],
+  "name": "Elyas's Notes",
+  "short_name": "Notes",
+  "start_url": "/",
+  "display": "standalone",
+  "description": "a website designed, developed and maintained, by the one and only Yassin Wael, with varying subjects, you will always find what you need.",
+  "lang": "en",
+  "dir": "auto",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "static/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "static/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "static/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "static/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
+      "sizes": "2880x1800",
+      "type": "image/png",
+      "description": "A screenshot of the home page"
+    }
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Subjects",
+      "url": "/viewall",
+      "description": "opens the page to view all available subjects."
+    }
+  ]
+}
