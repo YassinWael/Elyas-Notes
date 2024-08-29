@@ -655,7 +655,7 @@ details:not([open]) {
     padding: 8px;
     font-size: clamp(.5vh,18px,var(--font-size));
     animation-name: slideInLeft,come-alive;
-    animation-delay: 850ms;
+    animation-delay: 1s;
 }
 
 .lesson::after {
