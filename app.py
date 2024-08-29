@@ -206,11 +206,12 @@ def view_all():
 
 @app.route("/subject/<subject_name>")
 def view_subject(subject_name):
+    ic(subject_name)
     subject = subjects_collection.find_one({"name":subject_name})
     ic(subject)
     notes_count = [sum([len(note['lessons']) for note in subject["notes"]])][0]
     ic(notes_count)
-    subjects_collection.update_one({"name":subject_name},{"$set":{"notes_count":(len(subject["notes"][0]["lessons"]) + len(subject["notes"][1]["lessons"]))}})
+    subjects_collection.update_one({"name":subject_name},{"$set":{"notes_count":notes_count}})
 
 
     return render_template("view_subject.html",subject=subject)
