@@ -208,10 +208,32 @@ def view_all():
 def view_subject(subject_name):
     subject = subjects_collection.find_one({"name":subject_name})
     ic(subject)
+    notes_count = [sum([len(note['lessons']) for note in subject["notes"]])][0]
+    ic(notes_count)
     subjects_collection.update_one({"name":subject_name},{"$set":{"notes_count":(len(subject["notes"][0]["lessons"]) + len(subject["notes"][1]["lessons"]))}})
 
 
     return render_template("view_subject.html",subject=subject)
+
+@app.route("/note/<subject_name>/<chapter_name>/<lesson_name>")
+def view_note(subject_name,chapter_name,lesson_name):
+    
+    
+    ic(subject_name,chapter_name,lesson_name)
+
+    subject = subjects_collection.find_one({"name":subject_name}) 
+    chapter =  [chapter for chapter in subject['notes'] if chapter['chapter_name'] == chapter_name][0]
+    lessons = chapter['lessons']
+
+   
+    found_lesson = [lesson for lesson in lessons if lesson["lesson_name"] == lesson_name][0]
+    
+    
+    
+    
+    
+    ic(subject,found_lesson)
+    return render_template("view_note.html",lesson=found_lesson)
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host='0.0.0.0')
 

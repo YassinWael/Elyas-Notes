@@ -2,9 +2,37 @@
 
 {% block content %}
 {% set image_path = subject['image_2'] if subject['image_2'] else subject['image'] %}
+
+
 <section id="view-subject-hero" style="background-image: url('{{ image_path }}');">
     
     <h1 class="name" id="sharing-notes" style="margin:0;">{{ subject['name'] }}</h1>
     <h2 style="color: rgba(255, 255, 255, 0.907);">{{ subject['notes_count' ]}} Notes</h2>
 </section>
+
+<section id="view-subject-content">
+    <h1 class="name" style="font-size:calc(var(--font-size) + 8px);">{{ subject['name'] }}</h1>
+    {% for chapter in subject['notes'] %}
+    <details style="width: 100%;" open>
+            {% for lesson in chapter['lessons'] %}
+                <a  href="/note/{{ subject['name'] }}/{{ chapter['chapter_name'] }}/{{ lesson['lesson_name'] }}" class="lesson animate__animated">{{ lesson['lesson_name'] }} <span style="position:absolute; right:10px;color:rgba(0,0,0,.7);">{{ lesson['date'] }}</span></a>
+            {% endfor %}
+            
+        <summary style="width: 100%;">
+        <div class="chapter-container">
+            {{ chapter['chapter_name'] }}
+        </div>
+
+        </summary>
+    </details>
+    {% endfor %}
+</section>
+
+
+
+
+
+
+
+
 {% endblock %}

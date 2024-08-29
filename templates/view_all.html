@@ -10,9 +10,10 @@
     <div id="all-subjects-container">
 
     {% for subject in subjects %}
+            {% set image_path = subject['image'] %}
             <a style="width:300px; height:500px; position:relative;" href="/subject/{{subject['name']}}">
 
-                <div class="vertical-subject-card" style="background-image: url('{{ subject['image'] }}');">
+                <div class="vertical-subject-card" style="background-image: url('{{ image_path }}');">
                     <p class="vertical-subject-card-text">
                         {{subject['name']}} <br>
                         <span id="notes">{{subject['notes_count']}} Notes</span>
