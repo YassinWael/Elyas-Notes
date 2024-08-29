@@ -90,7 +90,8 @@ def signup():
                 "email":email,
                 "password":password,
                 "activated":"no",
-                "devices":[]
+                "devices":[],
+                "devices_limit":3
 
             })  
 
