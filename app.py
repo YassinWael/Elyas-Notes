@@ -68,8 +68,9 @@ def verify(username,email):
 @app.route("/")
 @app.route("/home")
 def home():
-    
-    flash("testing flashed messages for relative font sizing","success")
+    ic(request.user_agent)
+    ic(request.remote_addr)
+    ic(request.headers)
     return render_template("home.html",user_id=session.get('user_id'))
 
 
@@ -189,12 +190,12 @@ def logout():
         user_logged_in_devices.remove(request.remote_addr)
         updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
         ic(updated)
+        return redirect("/")
 
     else:
         return redirect(request.referrer)
 
 
-    return render_template('login.html',username=user['username'] if user else "")
 
 
 @app.route("/viewall")
