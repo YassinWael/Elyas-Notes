@@ -70,7 +70,8 @@ def verify(username,email):
 def home():
     ic(request.user_agent)
     ic(request.remote_addr)
-    ic(request.headers)
+    headers = dict(request.headers)
+    ic((headers.get('X-Forwarded-For')))
     return render_template("home.html",user_id=session.get('user_id'))
 
 
