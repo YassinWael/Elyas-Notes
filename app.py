@@ -206,7 +206,6 @@ def logout():
 
 
 @app.route("/viewall")
-@login_required
 def view_all():
     subjects = subjects_collection.find({})
     
