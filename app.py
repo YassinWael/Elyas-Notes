@@ -68,7 +68,6 @@ def verify(username,email):
 @app.route("/")
 @app.route("/home")
 def home():
-    ic(request.user_agent)
     ic(request.remote_addr)
     headers = dict(request.headers)
     ic(headers)
@@ -98,7 +97,6 @@ def signup():
 
             })  
 
-            user_id = users_collection.find_one({"email":email})
             
             flash("Successfully registered, Proceed to log-in below.","success")
 
@@ -122,7 +120,9 @@ def login():
         ic("Correct request")
         email = request.form.get("email")
         password = request.form.get("password")
-        user_ip = request.remote_addr
+        headers = dict(request.headers)
+       
+        user_ip = headers['X-Forwarded-For'] if headers['Host'] == "elyas-notes-production.up.railway.app" else request.remote_addr
         ic(user_ip)
         
         try:
@@ -143,7 +143,7 @@ def login():
                                 session['user_id'] = str(user['_id'])
                                 session['username'] = user['username']
                                 
-                                user_logged_in_devices.append(request.remote_addr)
+                                user_logged_in_devices.append(user_ip)
                                 ic(user_logged_in_devices)
                                 ic(user)
                                 updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
@@ -184,12 +184,17 @@ def login():
 @app.route("/logout",methods = ["POST","GET"])     
 def logout():
     if session['user_id']:
+        headers = dict(request.headers)
+        user_ip = headers['X-Forwarded-For'] if headers['Host'] == "elyas-notes-production.up.railway.app" else request.remote_addr
+        
         user_id = session['user_id']
         session['user_id'] = None
         session['username'] = None
+        
         user = find_by_id(user_id)
         user_logged_in_devices = user['devices']
-        user_logged_in_devices.remove(request.remote_addr)
+        user_logged_in_devices.remove(user_ip)
+        
         updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
         ic(updated)
         return redirect("/")
