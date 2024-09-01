@@ -7,6 +7,7 @@ from icecream import ic
 import functools
 load_dotenv()
 app = Flask(__name__)
+
 app.secret_key = environ.get("secret_key")
 
 client = MongoClient(environ.get("mongodb"))
@@ -70,9 +71,14 @@ def verify(username,email):
 def home():
     ic(request.remote_addr)
     headers = dict(request.headers)
+
     ic(headers)
     ic((headers.get('X-Forwarded-For')))
-    return render_template("home.html",user_id=session.get('user_id'))
+
+    subjects = list(subjects_collection.find({}))
+    
+
+    return render_template("home.html",user_id=session.get('user_id'),subjects=subjects[:3])
 
 
 
@@ -188,8 +194,7 @@ def logout():
         user_ip = headers['X-Forwarded-For'] if headers['Host'] == "elyas-notes-production.up.railway.app" else request.remote_addr
         
         user_id = session['user_id']
-        session['user_id'] = None
-        session['username'] = None
+        session.clear()
         
         user = find_by_id(user_id)
         user_logged_in_devices = user['devices']

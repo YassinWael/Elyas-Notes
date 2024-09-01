@@ -29,7 +29,29 @@
 </section>
 
 
-
+<script>
+    window.addEventListener('scroll', function() {
+        const header = document.querySelector('details:last-of-type');
+        const boxPosition = header.getBoundingClientRect().top; // Get the position of the box relative to the viewport
+        const windowHeight = window.innerHeight; // Get the height of the viewport
+        // Check if the top of the box is less than the viewport height
+        if (boxPosition < windowHeight) {
+            document.querySelectorAll(".lesson").forEach(lesson => {
+              
+                lesson.style.animationName = "slideInLeft,come-alive"
+                lesson.style.opacity = 1
+                document.querySelectorAll(".lesson:nth-child(2)").forEach(lesson => {
+              
+                    lesson.style.animationName = "slideInRight"
+                    
+                    
+                })
+                
+            })
+        }
+    });
+    
+</script>
 
 
 
