@@ -5,9 +5,8 @@ from dotenv import load_dotenv
 from os import environ
 from icecream import ic
 import functools
-from uuid import uuid4
 from datetime import datetime
-
+import pytz
 load_dotenv()
 app = Flask(__name__)
 
@@ -17,6 +16,7 @@ client = MongoClient(environ.get("mongodb"))
 db = client["ElyasNotes"]
 users_collection = db.Users
 subjects_collection = db.Subjects
+
 
 
 def login_required(route):
@@ -29,6 +29,28 @@ def login_required(route):
         return redirect("/login")
     return protect
 
+
+
+
+def admin_only(route):
+    @functools.wraps(route)
+    def admin_protect(*args,**kwargs):
+        user_id = session.get('user_id')
+        if user_id: #user is logged in
+            user = users_collection.find_one({"_id":ObjectId(user_id)})
+            if user['admin'] == "yes":
+                return route(*args,**kwargs)
+            
+        flash("You need to be in a higher position to access this.","error")
+        return redirect("/")
+    return admin_protect
+
+
+def time_now():
+    saudi_tz = pytz.timezone('Asia/Riyadh')
+    current_time = datetime.now(saudi_tz).strftime("%A, %dth of %B, %I:%M %p")
+    ic(current_time)
+    return current_time
 
 
 
@@ -105,7 +127,7 @@ def signup():
                 "admin":"no",
                 "devices":[],
                 "devices_limit":3,
-                "date_created":datetime.now().strftime("%A, %dth of %B, %H:%M")
+                "date_created":time_now()
 
             })  
 
@@ -136,7 +158,7 @@ def login():
        
         user_ip = headers['X-Forwarded-For'] if headers['Host'] == "elyas-notes-production.up.railway.app" else request.remote_addr
         user_agent = headers['User-Agent']
-        current_time = datetime.now().strftime("%A, %dth of %B, %H:%M")
+        current_time = time_now()
         ic(user_ip,user_agent)
 
 
@@ -257,12 +279,18 @@ def view_note(subject_name,chapter_name,lesson_name):
    
     found_lesson = [lesson for lesson in lessons if lesson["lesson_name"] == lesson_name][0]
     
-    # TODO: Add image upload functionality
+    
     
     
     
     ic(subject,found_lesson)
     return render_template("view_note.html",lesson=found_lesson)
+
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host='0.0.0.0')
 
+# TODO: Add creating notes for admins
