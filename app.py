@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 from os import environ
 from icecream import ic
 import functools
+from uuid import uuid4
+from datetime import datetime
+
 load_dotenv()
 app = Flask(__name__)
 
@@ -25,6 +28,7 @@ def login_required(route):
         flash("Please Login first","warning")
         return redirect("/login")
     return protect
+
 
 
 
@@ -98,8 +102,10 @@ def signup():
                 "email":email,
                 "password":password,
                 "activated":"no",
+                "admin":"no",
                 "devices":[],
-                "devices_limit":3
+                "devices_limit":3,
+                "date_created":datetime.now().strftime("%A, %dth of %B, %H:%M")
 
             })  
 
@@ -123,33 +129,42 @@ def login():
   
  
     if request.method == "POST":
-        ic("Correct request")
+      
         email = request.form.get("email")
         password = request.form.get("password")
         headers = dict(request.headers)
        
         user_ip = headers['X-Forwarded-For'] if headers['Host'] == "elyas-notes-production.up.railway.app" else request.remote_addr
-        ic(user_ip)
+        user_agent = headers['User-Agent']
+        current_time = datetime.now().strftime("%A, %dth of %B, %H:%M")
+        ic(user_ip,user_agent)
+
+
         
         try:
             user = users_collection.find_one({"email":email})
             if user:
-                ic("passed first IF check")
+                ic("passed user exists check")
                 user_logged_in_devices = user['devices']
                 user_devices_limit = user['devices_limit']
+                ic([device['user_ip'] for device in user_logged_in_devices])
                 if password == user["password"]:
-                    ic("passed second IF check")
+                    ic("passed password check")
                     if user['activated'] == 'yes':
-                        ic("passed third IF check")
-                        if user_ip not in user_logged_in_devices:
+                        ic("passed activation check")
+                        if user_ip not in [device['user_ip'] for device in user_logged_in_devices]:
                             ic("passed user_ip check")
 
                             if len(user_logged_in_devices) < int(user_devices_limit):
                                 flash("Logged in successfully :) ","success")
                                 session['user_id'] = str(user['_id'])
                                 session['username'] = user['username']
-                                
-                                user_logged_in_devices.append(user_ip)
+                                new_device = {
+                                    "user_ip":user_ip,
+                                    "user_agent":user_agent,
+                                    "date_joined":current_time
+                                }
+                                user_logged_in_devices.append(new_device)
                                 ic(user_logged_in_devices)
                                 ic(user)
                                 updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
@@ -189,7 +204,7 @@ def login():
         
 @app.route("/logout",methods = ["POST","GET"])     
 def logout():
-    if session['user_id']:
+    if session.get("user_id"):
         headers = dict(request.headers)
         user_ip = headers['X-Forwarded-For'] if headers['Host'] == "elyas-notes-production.up.railway.app" else request.remote_addr
         
@@ -197,8 +212,8 @@ def logout():
         session.clear()
         
         user = find_by_id(user_id)
-        user_logged_in_devices = user['devices']
-        user_logged_in_devices.remove(user_ip)
+        user_logged_in_devices = [device for device in user['devices'] if device['user_ip'] != user_ip]
+        
         
         updated = users_collection.update_one({"_id":ObjectId(user['_id'])},{"$set":{"devices":user_logged_in_devices}})
         ic(updated)
