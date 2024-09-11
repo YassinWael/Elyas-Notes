@@ -2,7 +2,12 @@
 {% block content %}
     <section id="hero">
         <div class="background">
-            <img src="/static/book.webp" alt="image of a book" id="hero-img">
+            <picture>
+                <source media="(max-width:600px)" srcset="/static/book-m.webp">
+                <source media="(min-width:601px)" srcset="/static/book.webp">
+                <img aria-hidden="true" decoding="async" src="/static/book.webp" alt="image of a book" id="hero-img">
+            </picture>
+            
         </div>
         <div class="hero-container">
             <h1 class="name" id="sharing-notes">Sharing Notes</h1>
@@ -28,7 +33,7 @@
                 <div class="subject-card animate__animated" style="opacity: 0;">
                 <a href="/subject/{{ subject['name'] }}" style="width: 100%; height:100%">
 
-                    <img src="{{ subject['image'] }}" alt="image of the subject" id="subject-img">
+                    <img decoding="async" loading="lazy" src="/static/homepage_images/{{ subject['name'] | lower }}.webp" alt="image of the subject" id="subject-img">
                     <p class="subject-text"> {{ subject['name'] }}</p>
                     <p class="subject-text notes-count"> {{ subject['notes_count'] }} Notes </p>
                 </a>

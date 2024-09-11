@@ -37,8 +37,7 @@ def admin_only(route):
     def admin_protect(*args,**kwargs):
         user_id = session.get('user_id')
         if user_id: #user is logged in
-            user = users_collection.find_one({"_id":ObjectId(user_id)})
-            if user['admin'] == "yes":
+            if is_admin(user_id):
                 return route(*args,**kwargs)
             
         flash("You need to be in a higher position to access this.","error")
@@ -63,6 +62,12 @@ def find_by_id(id):
     except Exception as e:
         return None
 
+
+def is_admin(id):
+    user = users_collection.find_one({"_id":ObjectId(id)})
+    ic("Checking {user.get('username')} for admin privileges...")
+    return user['admin'] == "yes" if user else "user was not found."
+   
 
 
 
