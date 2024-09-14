@@ -65,7 +65,7 @@ def find_by_id(id):
 
 def is_admin(id):
     user = users_collection.find_one({"_id":ObjectId(id)})
-    ic("Checking {user.get('username')} for admin privileges...")
+    ic(f"Checking {user.get('username')} for admin privileges...")
     return user['admin'] == "yes" if user else "user was not found."
    
 
@@ -277,19 +277,21 @@ def view_note(subject_name,chapter_name,lesson_name):
     
     ic(subject_name,chapter_name,lesson_name)
 
-    subject = subjects_collection.find_one({"name":subject_name}) 
-    chapter =  [chapter for chapter in subject['notes'] if chapter['chapter_name'] == chapter_name][0]
+    subject = subjects_collection.find_one({"name":subject_name,"notes.chapter_name":chapter_name,"notes.lessons.lesson_name":lesson_name},
+                                           {"notes.$":1}) 
+    ic(subject)
+    chapter = subject['notes'][0]
     lessons = chapter['lessons']
 
    
-    found_lesson = [lesson for lesson in lessons if lesson["lesson_name"] == lesson_name][0]
+    lesson = next((lesson for lesson in lessons if lesson["lesson_name"] == lesson_name),None)
     
     
     
     
     
-    ic(subject,found_lesson)
-    return render_template("view_note.html",lesson=found_lesson)
+    ic(subject,lesson)
+    return render_template("view_note.html",lesson=lesson)
 
 
 
@@ -298,4 +300,12 @@ def view_note(subject_name,chapter_name,lesson_name):
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host='0.0.0.0')
 
+
+
 # TODO: Add creating notes for admins
+
+
+
+
+
+
