@@ -6,8 +6,10 @@
 
 <section id="view-subject-hero" style="background-image: url('{{ image_path }}');">
     
-    <h1 class="name" id="sharing-notes" style="margin:0;">{{ subject['name'] }}</h1>
-    <h2 style="color: rgba(255, 255, 255, 0.907);">{{ subject['notes_count' ]}} Notes</h2>
+    <h1 class="name" id="sharing-notes" style="margin:0; z-index:3;">{{ subject['name'] }}</h1>
+    <h2 style="color: rgba(255, 255, 255, 0.907); z-index:3;">{{ subject['notes_count' ]}} Notes</h2>
+    <a href="/note/{{ subject['name'] }}/random/random" class="join-button" style="text-align:center; z-index: 3; border:0.2px solid black; position:relative;max-width:150px;display:inline;margin:0; font-size:var(--font-size);padding:5px; margin-top:4px " > Surprise Me! </a>
+
 </section>
 
 <section id="view-subject-content">
@@ -26,6 +28,9 @@
         </summary>
     </details>
     {% endfor %}
+    <a href="/note/{{ subject['name'] }}/random/random" class="join-button" style="z-index: 999999999; border:2px solid black; position:relative;max-width:150px;display:inline;margin:0; " >Surprise Me!</a>
+
+
 </section>
 
 

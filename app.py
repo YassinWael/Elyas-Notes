@@ -1,3 +1,4 @@
+from random import randint,choice
 from bson import ObjectId
 from flask import Flask,render_template,redirect,request,session,flash
 from pymongo import MongoClient
@@ -272,9 +273,16 @@ def view_subject(subject_name):
     return render_template("view_subject.html",subject=subject)
 
 @app.route("/note/<subject_name>/<chapter_name>/<lesson_name>")
-def view_note(subject_name,chapter_name,lesson_name):
+def view_note(subject_name,chapter_name="",lesson_name=""):
     
-    
+    if chapter_name == "random": #user wants a random lesson in a random chapter
+        ic(subject_name)
+        ic("Getting random lesson...")
+        subject = subjects_collection.find_one({"name":subject_name})
+        chapter = choice(subject["notes"])
+        lesson = choice(chapter['lessons'])
+        return render_template("view_note.html",lesson=lesson)
+
     ic(subject_name,chapter_name,lesson_name)
 
     subject = subjects_collection.find_one({"name":subject_name,"notes.chapter_name":chapter_name,"notes.lessons.lesson_name":lesson_name},
@@ -303,8 +311,8 @@ if __name__ == "__main__":
 
 
 # TODO: Add creating notes for admins
-
-
+# TODO: Create seperate utils.py
+# TODO: Write frontend for random note
 
 
 
