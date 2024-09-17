@@ -278,9 +278,18 @@ def view_note(subject_name,chapter_name="",lesson_name=""):
     if chapter_name == "random": #user wants a random lesson in a random chapter
         ic(subject_name)
         ic("Getting random lesson...")
-        subject = subjects_collection.find_one({"name":subject_name})
-        chapter = choice(subject["notes"])
-        lesson = choice(chapter['lessons'])
+        subject = subjects_collection.aggregate([
+            {"$match":{"name":subject_name}},
+            {"$unwind":"$notes"},
+            {"$sample":{"size":1}},
+            {"$unwind":"$notes.lessons"},
+            {"$sample":{"size":1}},
+            {"$project":{"_id":0,"notes.lessons":1}}
+        ])
+        lesson = list(subject)[0]['notes']['lessons']
+        ic(lesson)
+        ic(type(lesson))
+        print(f"Randomly chose {lesson['content']}")
         return render_template("view_note.html",lesson=lesson)
 
     ic(subject_name,chapter_name,lesson_name)
