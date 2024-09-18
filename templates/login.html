@@ -25,6 +25,10 @@
         <button href="#" class="join-button form-submit" type="submit" style="margin: 0; border:0;">Log in</button>
     
         <p class="form-text">Don't have an account? <span id="login"><a href="/sign-up">Sign-up</a></span></p>
+    
+       
+    
+    
     </form>
 </section>
 
@@ -35,31 +39,26 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var footer = document.getElementById("footer");
-        footer.style.display = "none"
-    });
-    function checkForOverflow() {
-        const elements = document.querySelectorAll('*');
-        const viewportWidth = document.documentElement.clientWidth;
-        const viewportHeight = document.documentElement.clientHeight;
-    
-        elements.forEach(element => {
-            const boundingRect = element.getBoundingClientRect();
-    
-            // Check if the element overflows the viewport width or height
-            if (boundingRect.width > viewportWidth || boundingRect.height > viewportHeight || 
-                boundingRect.left < 0 || boundingRect.right > viewportWidth || 
-                boundingRect.top < 0 || boundingRect.bottom > viewportHeight) {
-    
-                console.log('Overflowing Element:', element);
-                console.log('Bounding Rect:', boundingRect);
-            }
-        });
-    }
-    
-    // Run the function to find and log overflowing elements
-    document.addEventListener("DOMContentLoaded",checkForOverflow())
+   
+  tinymce.init({
+    selector: 'textarea',
+    plugins: [
+      // Core editing features
+      'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+      // Your account includes a free trial of TinyMCE premium features
+      // Try the most popular premium features until Oct 2, 2024:
+      'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+    ],
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+    tinycomments_mode: 'embedded',
+    tinycomments_author: 'Author name',
+    mergetags_list: [
+      { value: 'First.Name', title: 'First Name' },
+      { value: 'Email', title: 'Email' },
+    ],
+    ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+  });
+
     
 </script>
 

@@ -151,7 +151,7 @@ def signup():
 
 @app.route("/login",methods = ['GET','POST'])
 def login():
-   
+    ic(dict(request.form))
     user = find_by_id(session.get('user_id'))
     ic(user)
   
@@ -160,8 +160,9 @@ def login():
       
         email = request.form.get("email")
         password = request.form.get("password")
+      
         headers = dict(request.headers)
-       
+
         user_ip = headers['X-Forwarded-For'] if headers['Host'] == "elyas-notes-production.up.railway.app" else request.remote_addr
         user_agent = headers['User-Agent']
         current_time = time_now()
