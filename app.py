@@ -252,7 +252,24 @@ def logout():
         return redirect(request.referrer)
 
 
+@app.route("/create",methods = ["POST","GET"])
+def create_note():
+    if request.method == "POST":
+        subject = request.form.get("subject")
+        title = request.form.get("title")
+        content = request.form.get("content")
+        ic(subject,title,content)
 
+    all_subjects = list(subjects_collection.find({},{"name":1,"_id":0,"notes.chapter_name":1}))
+
+    subjects = [
+        {"name":subject['name'],
+         "chapters":[chapter['chapter_name'] for chapter in subject['notes']]}
+        for subject in all_subjects
+    ] 
+    ic(subjects)
+
+    return render_template('create_note.html',subjects=subjects)
 
 @app.route("/viewall")
 def view_all():
@@ -286,6 +303,7 @@ def view_note(subject_name,chapter_name="",lesson_name=""):
             {"$unwind":"$notes.lessons"},
             {"$sample":{"size":1}},
             {"$project":{"_id":0,"notes.lessons":1}}
+    
         ])
         lesson = list(subject)[0]['notes']['lessons']
         ic(lesson)
@@ -322,7 +340,6 @@ if __name__ == "__main__":
 
 # TODO: Add creating notes for admins
 # TODO: Create seperate utils.py
-# TODO: Write frontend for random note
 
 
 

@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+
+
+
+{% block content %}
+    <style>
+      .fade-out {
+        opacity: 0;
+        transition: opacity 0.3s ease-in;
+    }
+    
+    @keyframes fade-in {
+
+
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+       
+      }
+
+
+    }
+    
+    
+    </style>
+    <div class="form-container">
+        <form action="/create" method="POST" id="create-form">
+            <div class="drop-down-container">
+                <select name="subject" id="subject-dropdown" class="create-drop-down">
+                    <option value="" >Subject</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject['name'] }}">{{ subject['name'] }}</option>
+                    {% endfor %}
+                </select>
+                <select name="chapter" id="chapter-dropdown" style="animation-duration: 2s;" class="create-drop-down">
+                    
+                </select>
+            </div>
+            <input name="title" class="create-title" type="text" placeholder="Title">
+            <textarea name="content" placeholder="Note contents"></textarea>
+            <button href="" type="submit" style="margin-left:0;" class="join-button">Publish</button>
+        </form>
+        
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+      console.log("hi");
+      const subjects = {{ subjects | tojson | safe }};
+
+      document.querySelector("#subject-dropdown").addEventListener("change", function(e) {
+        const chapterDropdown = document.querySelector("#chapter-dropdown")
+        const selectedValue = e.target.value;
+        const selectedSubject = subjects.find(subject => subject.name == selectedValue)
+        chapterDropdown.innerHTML = ''
+
+
+        if (selectedSubject) {
+          selectedSubject.chapters.forEach(function(chapter) {
+            console.log(`Chapter: ${chapter}`)
+            const option = document.createElement('option')
+            option.value = chapter;
+            option.text = chapter; 
+            chapterDropdown.add(option);
+
+          })
+        }
+
+
+
+
+
+
+        console.log(`Selected subject is:  ${selectedValue}`);
+        console.log(selectedSubject);
+        
+        chapterDropdown.style.animationName = "fade-in";
+
+
+       
+        
+
+
+        
+      })
+
+
+
+
+      tinymce.init({
+        selector: 'textarea',
+        plugins: [
+          // Core editing features
+          'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+          // Your account includes a free trial of TinyMCE premium features
+          // Try the most popular premium features until Oct 2, 2024:
+          'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+        ],
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+          { value: 'First.Name', title: 'First Name' },
+          { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+      });
+
+      
+      </script>
+{% endblock %}
