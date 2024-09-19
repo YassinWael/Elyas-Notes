@@ -1,4 +1,3 @@
-from random import randint,choice
 from bson import ObjectId
 from flask import Flask,render_template,redirect,request,session,flash
 from pymongo import MongoClient
@@ -38,6 +37,7 @@ def admin_only(route):
     def admin_protect(*args,**kwargs):
         user_id = session.get('user_id')
         if user_id: #user is logged in
+            ic(is_admin(user_id))
             if is_admin(user_id):
                 return route(*args,**kwargs)
             
@@ -67,6 +67,7 @@ def find_by_id(id):
 def is_admin(id):
     user = users_collection.find_one({"_id":ObjectId(id)})
     ic(f"Checking {user.get('username')} for admin privileges...")
+    session['admin'] = user['admin']
     return user['admin'] == "yes" if user else "user was not found."
    
 
@@ -101,6 +102,8 @@ def verify(username,email):
 @app.route("/")
 @app.route("/home")
 def home():
+    if session.get('user_id'): # refresh admin priveliges
+        is_admin(session.get('user_id'))
     ic(request.remote_addr)
     headers = dict(request.headers)
 
@@ -188,6 +191,8 @@ def login():
                                 flash("Logged in successfully :) ","success")
                                 session['user_id'] = str(user['_id'])
                                 session['username'] = user['username']
+                                session['admin'] = user['admin']
+
                                 new_device = {
                                     "user_ip":user_ip,
                                     "user_agent":user_agent,
@@ -206,6 +211,8 @@ def login():
                             flash("Logged in successfully :) ","success")
                             session['user_id'] = str(user['_id'])
                             session['username'] = user['username']
+                            session['admin'] = user['admin']
+
                             ic(user)
                             return redirect("/")
                             
@@ -241,6 +248,9 @@ def logout():
         session.clear()
         
         user = find_by_id(user_id)
+        if not user: #user is not in the database somehow
+            session.clear()
+            return redirect('/')
         user_logged_in_devices = [device for device in user['devices'] if device['user_ip'] != user_ip]
         
         
@@ -249,16 +259,37 @@ def logout():
         return redirect("/")
 
     else:
+        session.clear()
         return redirect(request.referrer)
 
-
 @app.route("/create",methods = ["POST","GET"])
+@admin_only
 def create_note():
     if request.method == "POST":
         subject = request.form.get("subject")
+        chapter = request.form.get("chapter")
         title = request.form.get("title")
         content = request.form.get("content")
-        ic(subject,title,content)
+        new_lesson = {
+            "lesson_name":title,
+            "content":content,
+            "date":time_now()
+        }
+        ic(subject,title,content,chapter)
+        ic(new_lesson)
+        print('------------------------------------------------------------------------------------------')
+        print('------------------------------------------------------------------------------------------')
+        print('------------------------------------------------------------------------------------------')
+        result = subjects_collection.update_one({'name':subject,
+                                                 'notes.chapter_name':chapter
+                                                    
+                                                 },
+                                                 {
+                                                     "$push": {
+                                                         "notes.$.lessons":new_lesson
+                                                     }
+                                                 })
+        ic(result)
 
     all_subjects = list(subjects_collection.find({},{"name":1,"_id":0,"notes.chapter_name":1}))
 
@@ -270,15 +301,15 @@ def create_note():
     ic(subjects)
 
     return render_template('create_note.html',subjects=subjects)
-
 @app.route("/viewall")
+@login_required
 def view_all():
     subjects = subjects_collection.find({})
     
     return render_template("view_all.html",subjects=list(subjects))
 
-
 @app.route("/subject/<subject_name>")
+@login_required
 def view_subject(subject_name):
     ic(subject_name)
     subject = subjects_collection.find_one({"name":subject_name})
@@ -291,6 +322,7 @@ def view_subject(subject_name):
     return render_template("view_subject.html",subject=subject)
 
 @app.route("/note/<subject_name>/<chapter_name>/<lesson_name>")
+@login_required
 def view_note(subject_name,chapter_name="",lesson_name=""):
     
     if chapter_name == "random": #user wants a random lesson in a random chapter
@@ -319,7 +351,7 @@ def view_note(subject_name,chapter_name="",lesson_name=""):
     chapter = subject['notes'][0]
     lessons = chapter['lessons']
 
-   
+    
     lesson = next((lesson for lesson in lessons if lesson["lesson_name"] == lesson_name),None)
     
     
@@ -337,10 +369,9 @@ if __name__ == "__main__":
     app.run(debug=True,port=8080,host='0.0.0.0')
 
 
-
-# TODO: Add creating notes for admins
-# TODO: Create seperate utils.py
-
+# TODO: Create seperate utils.py (25min)
+# TODO: Linkify the links in the navbar (15min)
+# TODO: Create a link on each subject's page to create a note from there (15min)
 
 
 

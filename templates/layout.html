@@ -41,10 +41,14 @@ media="print" onload="this.media='all'; this.onload=null;">
             <li><a href="#" class="nav-link">Physics</a></li>
         </ul>
         {% if session['user_id'] %}
-            <a href="/logout" class="join-button">Logout</a>
+            {% if session['admin'] == 'yes' %}
+                <a href="/create" class="join-button">Create</a>
             {% else %}
-            <a href="/sign-up" class="join-button">Join Now</a>
+                <a href="/logout" class="join-button">Logout</a>
             {% endif %}
+        {% else %}
+        <a href="/sign-up" class="join-button">Join Now</a>
+        {% endif %}
     </nav>
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
