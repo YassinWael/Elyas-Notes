@@ -1,5 +1,5 @@
 from bson import ObjectId
-from flask import Flask,render_template,redirect,request,session,flash
+from flask import Flask,render_template,redirect,request,session,flash,send_file
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from os import environ
@@ -362,6 +362,13 @@ def view_note(subject_name,chapter_name="",lesson_name=""):
     return render_template("view_note.html",lesson=lesson)
 
 
+
+
+
+
+@app.route("/.well-known/assetlinks.json")
+def assetlinks():
+    return send_file('.well-known/assetlinks.json')
 
 
 
