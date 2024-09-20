@@ -370,7 +370,9 @@ def view_note(subject_name,chapter_name="",lesson_name=""):
 def assetlinks():
     return send_file('.well-known/assetlinks.json')
 
-
+@app.route("/privacy")
+def privacy():
+    return render_template('privacy.html')
 
 if __name__ == "__main__":
     app.run(debug=True,port=8080,host='0.0.0.0')
