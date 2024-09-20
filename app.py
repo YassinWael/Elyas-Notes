@@ -372,6 +372,6 @@ if __name__ == "__main__":
 # TODO: Create seperate utils.py (25min)
 # TODO: Linkify the links in the navbar (15min)
 # TODO: Create a link on each subject's page to create a note from there (15min)
-
+# TODO: Publish to play store (8-9days)
 
 
