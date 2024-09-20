@@ -1,21 +1,16 @@
 from bson import ObjectId
 from flask import Flask,render_template,redirect,request,session,flash,send_file
-from pymongo import MongoClient
+from utils import users_collection,subjects_collection,is_admin,verify,time_now,find_by_id
 from dotenv import load_dotenv
 from os import environ
 from icecream import ic
 import functools
-from datetime import datetime
-import pytz
 load_dotenv()
 app = Flask(__name__)
 
 app.secret_key = environ.get("secret_key")
 
-client = MongoClient(environ.get("mongodb"))
-db = client["ElyasNotes"]
-users_collection = db.Users
-subjects_collection = db.Subjects
+
 
 
 
@@ -46,57 +41,6 @@ def admin_only(route):
     return admin_protect
 
 
-def time_now():
-    saudi_tz = pytz.timezone('Asia/Riyadh')
-    current_time = datetime.now(saudi_tz).strftime("%A, %dth of %B, %I:%M %p")
-    ic(current_time)
-    return current_time
-
-
-
-
-def find_by_id(id):
-    user_id = ObjectId(id)
-    user = users_collection.find_one({"_id":user_id})
-    try:
-        return user
-    except Exception as e:
-        return None
-
-
-def is_admin(id):
-    user = users_collection.find_one({"_id":ObjectId(id)})
-    ic(f"Checking {user.get('username')} for admin privileges...")
-    session['admin'] = user['admin']
-    return user['admin'] == "yes" if user else "user was not found."
-   
-
-
-
-
-
-def verify(username,email):
-    try: 
-        existing_user_by_email = users_collection.find_one({"email":email})
-        existing_user_by_username = users_collection.find_one({"username":username})
-        if existing_user_by_email:
-            raise ValueError("Email has already been used.")
-        elif existing_user_by_username:
-            raise ValueError("Username has already been used.")
-        ic("Successfully registered")
-        flash("Successfully registered","success")
-        return True
-    except ValueError as ve:
-        ic(str(ve))
-        flash(str(ve),"error")
-        return False
-    except Exception as e:
-        ic(f"error while verifying email and username : {e}")
-        flash(f"An unexpected error has occured, try again later or contact yassin, {e}","error")
-        return False
-    
-        
-    
 
 
 @app.route("/")
@@ -301,12 +245,15 @@ def create_note():
     ic(subjects)
 
     return render_template('create_note.html',subjects=subjects)
+
+
 @app.route("/viewall")
 @login_required
 def view_all():
     subjects = subjects_collection.find({})
     
     return render_template("view_all.html",subjects=list(subjects))
+
 
 @app.route("/subject/<subject_name>")
 @login_required
@@ -378,9 +325,7 @@ if __name__ == "__main__":
     app.run(debug=True,port=8080,host='0.0.0.0')
 
 
-# TODO: Create seperate utils.py (25min)
 # TODO: Linkify the links in the navbar (15min)
 # TODO: Create a link on each subject's page to create a note from there (15min)
-# TODO: Publish to play store (8-9days)
 
 
